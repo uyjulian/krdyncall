@@ -63,3 +63,7 @@ $(DEPENDENCY_OUTPUT_DIRECTORY)/lib/libdyncall_s.a: | $(DEPENDENCY_SOURCE_DIRECTO
 		&& \
 	cmake --build $(DEPENDENCY_BUILD_DIRECTORY_DYNCALL) && \
 	cmake --build $(DEPENDENCY_BUILD_DIRECTORY_DYNCALL) --target install
+
+$(DEPENDENCY_OUTPUT_DIRECTORY)/lib/libdynload_s.a: $(DEPENDENCY_OUTPUT_DIRECTORY)/lib/libdyncall_s.a
+
+
