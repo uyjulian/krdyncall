@@ -33,6 +33,7 @@ $(DEPENDENCY_SOURCE_FILE_DYNCALL): | $(DEPENDENCY_SOURCE_DIRECTORY)
 $(DEPENDENCY_SOURCE_DIRECTORY_DYNCALL): $(DEPENDENCY_SOURCE_FILE_DYNCALL)
 	mkdir -p $@
 	tar -x -f $< -C $@ --strip-components 1
+	sed -i -e 's/add_subdirectory(dyncallback)//' $@/CMakeLists.txt
 
 DEPENDENCY_BUILD_DIRECTORY_DYNCALL := $(DEPENDENCY_BUILD_DIRECTORY)/dyncall
 
