@@ -9,7 +9,7 @@
 
 CFLAGS += -std=gnu++17
 
-BASESOURCES += tjsdyncall.cpp tjsdynload.cpp tjsdynguess.cpp tjsdynstruct.cpp tjsdyntype.cpp tjsdynuserdata.cpp CharacterSet.cpp
+BASESOURCES += tjsdyncall.cpp tjsdynuserdata.cpp CharacterSet.cpp
 SOURCES += $(BASESOURCES)
 
 PROJECT_BASENAME = krdyncall
