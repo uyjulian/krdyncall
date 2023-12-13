@@ -397,104 +397,47 @@ public:
 
 		char ch;
 		int p = 3;
-		int ptr = 0;
 		while ( (ch = *s++) && (ch != DC_SIGCHAR_ENDARG) )
 		{
 			if (p > top) return tjsW_error(&state, "Need more arguments (call signature is '%s')", callsignature );
-			if (ptr == 0)
+			switch(ch)
 			{
-				switch(ch)
-				{
-					case '*':
-						ptr += 1;
-						continue;
-					case DC_SIGCHAR_BOOL:
-						dcArgBool(g_pCallVM, (DCbool) tjsW_checkinteger(&state, p) );
-						break;
-					case DC_SIGCHAR_CHAR:
-					case DC_SIGCHAR_UCHAR:
-						dcArgChar(g_pCallVM, (DCchar) tjsW_checkinteger(&state, p) );
-						break;
-					case DC_SIGCHAR_SHORT:
-					case DC_SIGCHAR_USHORT:
-						dcArgShort(g_pCallVM, (DCshort) tjsW_checkinteger(&state, p) );
-						break;
-					case DC_SIGCHAR_INT:
-					case DC_SIGCHAR_UINT:
-						dcArgInt(g_pCallVM, (DCint) tjsW_checkinteger(&state, p) );
-						break;
-					case DC_SIGCHAR_LONG:
-					case DC_SIGCHAR_ULONG:
-						dcArgLong(g_pCallVM, (DClong) tjsW_checkinteger(&state, p) );
-						break;
-					case DC_SIGCHAR_LONGLONG:
-					case DC_SIGCHAR_ULONGLONG:
-						dcArgLongLong(g_pCallVM, (DClonglong) tjsW_checkinteger(&state, p) );
-						break;
-					case DC_SIGCHAR_FLOAT:
-						dcArgFloat(g_pCallVM, (DCfloat) tjsW_checkreal(&state, p) );
-						break; 
-					case DC_SIGCHAR_DOUBLE:
-						dcArgDouble(g_pCallVM, (DCdouble) tjsW_checkreal(&state, p) );
-						break;
-					case DC_SIGCHAR_POINTER:
-						dcArgPointer(g_pCallVM, (DCpointer) tjsW_touserdata(&state, p) );
-						break;
-					case DC_SIGCHAR_STRING:
-						return tjsW_error(&state, "String typecode not yet implemented");
-					default:
-						return tjsW_error(&state, "Invalid typecode '%c' in call signature '%s'", s[0], callsignature);
-				}
-			}
-			else /* pointer types */
-			{
-				switch (ch) {
-					case '*':
-						ptr++;
-						continue;
-					case '<': {
-#if 0
-						const char *begin = s;
-						while ((ch = *s++) != '>');
-						const char *end = s;
-						switch (lua_type(L, p)) {
-							case LUA_TNUMBER:
-							case LUA_TTABLE:
-							case LUA_TLIGHTUSERDATA:
-							case LUA_TUSERDATA:
-							default:
-								tjsW_error(&state, "Pointer type mismatch at argument #%d", p);
-								break;
-						}
-#endif
-						return tjsW_error(&state, "Pointer type not yet implemented");
-					}
-						break;
-					case DC_SIGCHAR_BOOL:
-					case DC_SIGCHAR_CHAR:
-						return tjsW_error(&state, "bool/char pointer type not yet implemented");
-					case DC_SIGCHAR_UCHAR:
-					case DC_SIGCHAR_SHORT:
-					case DC_SIGCHAR_USHORT:
-					case DC_SIGCHAR_INT:
-					case DC_SIGCHAR_UINT:
-					case DC_SIGCHAR_LONG:
-					case DC_SIGCHAR_ULONG:
-					case DC_SIGCHAR_LONGLONG:
-					case DC_SIGCHAR_ULONGLONG:
-					case DC_SIGCHAR_FLOAT:
-					case DC_SIGCHAR_DOUBLE:
-					case DC_SIGCHAR_POINTER:
-					case DC_SIGCHAR_STRING:
-					case DC_SIGCHAR_VOID:
-						ptr = 0;
-						return tjsW_error(&state, "Pointer type not yet implemented");
-#if 0
-						break;
-#endif
-					default:
-						return tjsW_error(&state, "Invalid signature");
-				}
+				case DC_SIGCHAR_BOOL:
+					dcArgBool(g_pCallVM, (DCbool) tjsW_checkinteger(&state, p) );
+					break;
+				case DC_SIGCHAR_CHAR:
+				case DC_SIGCHAR_UCHAR:
+					dcArgChar(g_pCallVM, (DCchar) tjsW_checkinteger(&state, p) );
+					break;
+				case DC_SIGCHAR_SHORT:
+				case DC_SIGCHAR_USHORT:
+					dcArgShort(g_pCallVM, (DCshort) tjsW_checkinteger(&state, p) );
+					break;
+				case DC_SIGCHAR_INT:
+				case DC_SIGCHAR_UINT:
+					dcArgInt(g_pCallVM, (DCint) tjsW_checkinteger(&state, p) );
+					break;
+				case DC_SIGCHAR_LONG:
+				case DC_SIGCHAR_ULONG:
+					dcArgLong(g_pCallVM, (DClong) tjsW_checkinteger(&state, p) );
+					break;
+				case DC_SIGCHAR_LONGLONG:
+				case DC_SIGCHAR_ULONGLONG:
+					dcArgLongLong(g_pCallVM, (DClonglong) tjsW_checkinteger(&state, p) );
+					break;
+				case DC_SIGCHAR_FLOAT:
+					dcArgFloat(g_pCallVM, (DCfloat) tjsW_checkreal(&state, p) );
+					break; 
+				case DC_SIGCHAR_DOUBLE:
+					dcArgDouble(g_pCallVM, (DCdouble) tjsW_checkreal(&state, p) );
+					break;
+				case DC_SIGCHAR_POINTER:
+					dcArgPointer(g_pCallVM, (DCpointer) tjsW_touserdata(&state, p) );
+					break;
+				case DC_SIGCHAR_STRING:
+					return tjsW_error(&state, "String typecode not yet implemented");
+				default:
+					return tjsW_error(&state, "Invalid typecode '%c' in call signature '%s'", s[0], callsignature);
 			}
 
 			p += 1;
@@ -504,7 +447,6 @@ public:
 		{
 			return tjsW_error(&state, "too many arguments for given signature, expected %d but received %d" , p-3, top-2 );
 		}
-			
 
 		switch(*s++)
 		{
@@ -544,16 +486,6 @@ public:
 				return tjsW_error(&state, "String return not yet supported");
 			case DC_SIGCHAR_POINTER:
 				tjsW_pushlightuserdata( &state, dcCallPointer(g_pCallVM, f) );
-				break;
-			case '*':
-				switch (*s++) {
-					case DC_SIGCHAR_UCHAR:
-					case DC_SIGCHAR_CHAR:
-						return tjsW_error(&state, "String return not yet supported");
-					default:
-						tjsW_pushlightuserdata( &state, dcCallPointer(g_pCallVM, f) );
-						break;
-				}
 				break;
 			default:
 				return tjsW_error(&state, "invalid signature");
