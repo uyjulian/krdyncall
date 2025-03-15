@@ -13,6 +13,7 @@ file(MAKE_DIRECTORY ${DEPENDENCY_OUTPUT_DIRECTORY}/include)
 include(ExternalProject)
 ExternalProject_Add(dyncall-build
     URL https://dyncall.org/r1.4/dyncall-1.4.tar.gz
+    URL_HASH SHA256=14437dbbef3b6dc92483f6507eaf825ab97964a89eecae8cb347a6bec9c32aae
     DOWNLOAD_EXTRACT_TIMESTAMP TRUE
     PATCH_COMMAND sed -i -e "s/add_subdirectory(dyncallback)//" <SOURCE_DIR>/CMakeLists.txt
     CONFIGURE_COMMAND
